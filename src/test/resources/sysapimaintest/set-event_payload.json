@@ -1,0 +1,7 @@
+{
+  "cid": 15,
+  "fname": "Bill",
+  "lname": "Clancy",
+  "street": "319 Upland Pl.",
+  "city": "Seattle"
+}

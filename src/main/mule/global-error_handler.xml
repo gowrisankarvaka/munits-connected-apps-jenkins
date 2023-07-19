@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<error-handler name="global-error_handlerError_Handler" doc:id="f9090c3b-537d-4a7d-b8c7-45da896b5700" >
+		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="021a5a48-d9d6-416b-9d33-63ab62ef0660" type="CONNECTIVITY">
+			<set-variable value="400" doc:name="statusCode : 400" doc:id="afb61412-c2fe-44fb-b3a1-3062cbcb3c51" variableName="statusCode"/>
+		</on-error-continue>
+		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="e31c9fcd-5ab8-4143-b1f0-e0a0d90c03ec" type="EXPRESSION">
+			<set-variable value="501" doc:name="statusCode : 501" doc:id="944a6f9b-01c2-44ee-af36-e387f78a5409" variableName="statusCode"/>
+		</on-error-continue>
+		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="582b1a7e-68b4-4e94-9f8e-367d2e2bb706" type="ANY">
+			<set-variable value="505" doc:name="statusCode : 505" doc:id="ca8a424d-fad8-4ab4-a9a0-140c5db252e9" variableName="statusCode" />
+		</on-error-continue>
+	</error-handler>
+</mule>

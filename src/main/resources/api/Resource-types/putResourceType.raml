@@ -1,0 +1,19 @@
+#%RAML 1.0 ResourceType
+
+ put:
+    queryParameters:
+      cid:
+        type: number
+        minimum: 0
+        maximum: 100
+        required: false
+    body:
+      application/json:
+        type: libraries.datatype
+        example: !include ../Examples/file.json
+    responses:
+      200:
+        body:
+          application/json:
+            type: resp_dt
+            example: {message: 'updated successfully!!!!', statusCode: '200'}

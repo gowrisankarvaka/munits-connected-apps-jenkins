@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+	<munit:config name="sys_api-test-suite.xml" />
+	<munit:test name="sys_api-test-suite-get:\customer:sys_api-configTest" doc:id="201f08df-f785-4334-a5c5-81680d8b285e" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="af99fe45-f9b4-4b64-a41a-1b9d885d4499" processor="salesforce:query">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="2b3b1550-909b-458c-8e33-0bfca05941c1" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\customer:sys_api-config" doc:id="4413aa59-11b1-4bd1-933b-35707e642d3f" name="get:\customer:sys_api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="a0f40504-1849-4008-b698-d6f02d12922f" is="#[MunitTools::notNullValue()]" expression="#[payload]" />
+			<munit-tools:assert doc:name="Assert expression" doc:id="8c3e3f93-9e8a-4598-b492-9fca288be6c0" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="sys_api-test-suite-post:\customer:application\json:sys_api-configTest" doc:id="2ee38624-c247-4366-afdf-2702c177d163" description="Test">
+		<munit:behavior >
+			<munit:set-event doc:name="Set Event" doc:id="70d9f08c-e21c-4731-b401-dc84efe30af3" >
+				<munit:payload value="#[output application/json&#10;---&#10;readUrl('classpath://sysapimaintest/set-event_payload.json','application/json')]" />
+			</munit:set-event>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="c32994b4-6d5f-43cb-9e90-6c3fecb4ee34" processor="salesforce:create">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="9dc063c5-c26f-4fe1-93d8-4fb272ec37d4" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\customer:application\json:sys_api-config" doc:id="5331486f-e2c8-427b-a3e3-c4aba0f0b227" name="post:\customer:application\json:sys_api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="b5bee07c-f1a5-43db-b214-b30fbce5acaa" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+			<munit-tools:assert doc:name="Assert expression" doc:id="f8141ef2-f000-4da0-bc22-03a4e48b5bd7" />
+		</munit:validation>
+	</munit:test>
+	<munit:test name="sys_api-test-suite-put:\customer:application\json:sys_api-configTest" doc:id="3e93bd05-45a3-4bbc-9a93-bd8d50f937c8" description="Test">
+		<munit:behavior >
+			<munit:set-event doc:name="Set Event" doc:id="ce66784f-446d-48ae-853b-06f92e9da7c0" >
+				<munit:payload value="#[output application/json&#10;---&#10;readUrl('classpath://sysapimaintest/set-event_payload.json','application/json')]" />
+				<munit:attributes value="#[{&#10;	queryParams:{id:25}&#10;}]" />
+			</munit:set-event>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="f12b4013-3e69-423d-a517-eb7de442a5d8" processor="salesforce:update">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="079fb554-cea0-49ec-804b-3ed009a69b4e" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:attributes value="#[attributes.queryParams.id]" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to put:\customer:application\json:sys_api-config" doc:id="dedd98a6-9c0e-4c4d-8003-4ee2b41952c3" name="put:\customer:application\json:sys_api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="593dcd62-d734-4b9a-aa8e-b5d81341da82" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+			<munit-tools:assert doc:name="Assert expression" doc:id="73f7cd3d-86e2-4203-8fc7-fc6a6936d466" />
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

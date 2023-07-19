@@ -1,0 +1,27 @@
+#%RAML 1.0 Trait
+responses:
+  400:
+        body:
+          application/json:
+            type: resp_dt
+            example: {message: 'Bad Request', statusCode: '400'}
+  401:
+        body:
+          application/json:
+            type: resp_dt
+            example: {message: 'Unauthorized', statusCode: '401'}
+  403:
+        body:
+          application/json:
+            type: resp_dt
+            example: {message: 'Forbidden', statusCode: '403'}
+  404:
+        body:
+          application/json:
+            type: resp_dt
+            example: {message: 'Not Found', statusCode: '404'}
+  500:
+        body:
+          application/json:
+            type: resp_dt
+            example: {message: 'Server Error', statusCode: '500'}

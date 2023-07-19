@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+
+	<flow name="retrieve-Flow" doc:id="a3271066-9427-4255-9cee-68a3c072a895" >
+		<salesforce:query doc:name="Query" doc:id="2b3b1550-909b-458c-8e33-0bfca05941c1" config-ref="Salesforce_Config">
+			<salesforce:salesforce-query ><![CDATA[SELECT cid__c,city__c,fname__c,lname__c,street__c FROM customer__c]]></salesforce:salesforce-query>
+		</salesforce:query>
+		<ee:transform doc:name="Transform Message" doc:id="2a3fdc9a-b195-4077-975b-5f70b5b6f477" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="update-Flow" doc:id="16b39e24-7b46-4a74-b3aa-2fc03923869d" >
+		<salesforce:query doc:name="Query" doc:id="e7753242-dfd8-4de0-84ed-3b4d30861321" config-ref="Salesforce_Config">
+			<salesforce:salesforce-query><![CDATA[SELECT cid__c,city__c,fname__c,Id,lname__c,street__c FROM customer__c where cid__c =:id]]></salesforce:salesforce-query>
+			<salesforce:parameters><![CDATA[#[output application/java
+---
+{
+	id : attributes.queryParams.id
+}]]]></salesforce:parameters>
+		</salesforce:query>
+		<ee:transform doc:name="Transform Message" doc:id="260b330a-dd36-4a91-a5f4-1ebca3528084">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+	Id: payload.Id,
+	(vars.inputPayload)
+}
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="Transform Message" doc:id="34ae591b-f4aa-4c7e-94f5-9ceccd30b801">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/java
+---
+[{
+	Id: payload.Id[0],
+        "cid__c": payload."cid",
+        "city__c": payload."city",
+        "fname__c": payload."fname",
+        "street__c": payload."street",
+        "lname__c": payload."lname"
+}]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger1" doc:id="3f101a84-de57-4b16-810a-c84533de28ba" message="#[payload]" />
+		<salesforce:update type="customer__c" doc:name="Update" doc:id="7e4cad4a-1442-4d8c-a9a5-aae999985fdc" config-ref="Salesforce_Config">
+		</salesforce:update>
+		<!-- [STUDIO:"Delete"]		<salesforce:delete doc:name="Delete" doc:id="ddb9d571-e1c5-4040-8018-290bb51bad2b" config-ref="Salesforce_Config"/> [STUDIO] -->
+	</flow>
+	<flow name="insert-Flow" doc:id="3e84520f-656f-463e-b9c2-af46710b0f5c" >
+		<ee:transform doc:name="Transform Message" doc:id="a9fe1259-6e3d-47af-a942-ebf246bc1b47" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+[{
+        "cid__c": payload."cid",
+        "city__c": payload."city",
+        "fname__c": payload."fname",
+        "street__c": payload."street",
+        "lname__c": payload."lname"
+}]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create doc:name="Create" doc:id="9dc063c5-c26f-4fe1-93d8-4fb272ec37d4" config-ref="Salesforce_Config" type="customer__c"/>
+	</flow>
+</mule>
